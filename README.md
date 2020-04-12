@@ -1,8 +1,10 @@
 #golang modules
-#1) logtrace - log trace
+#1) add logtrace - log trace
 
-#2) restapi -
+#2) add restapi -
 
-#3) errorpage -
+#3) add errorpage -
 
 #4) add gormdb
+
+$5) add staticfiles
