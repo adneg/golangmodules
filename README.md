@@ -7,4 +7,4 @@
 
 #4) add gormdb
 
-$5) add staticfiles
+#5) add staticfiles
