@@ -17,8 +17,8 @@ func Init(configfile string) {
 }
 func Start() (db *gorm.DB) {
 	db, err := gorm.Open(conf.DriverDB, conf.Databasefile)
-	db.DB().SetMaxIdleConns(1)
-	db.DB().SetMaxOpenConns(1)
+	db.DB().SetMaxIdleConns(conf.MaxIdleConns)
+	db.DB().SetMaxOpenConns(conf.MaxOpenConns)
 
 	if err != nil {
 		logtrace.Error.Fatalln(err.Error())
