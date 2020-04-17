@@ -1,6 +1,8 @@
 package backuplist
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -12,6 +14,11 @@ const (
 	fileContentType = "application/json"
 )
 
+// curl --header "Content-Type: application/json" \
+//   --request POST \
+//   --data '{"NameFirma":"nazwa_firmy","NamePawilon":"nazwa_pawilonu","NameServer":"nazwa_serwera","NameDb":"nazwa_bazy"}' \
+//   http://localhost:8080/backuplist/backups
+
 func Createcallhandles() {
 	// rest.GET("/backuplist/backups/:limit", getLimitBackups)
 	rest.GET("/backuplist/firms", getAllFirms)
@@ -19,6 +26,13 @@ func Createcallhandles() {
 	rest.GET("/backuplist/databases", getAllDatabases)
 	rest.GET("/backuplist/servers", getAllServers)
 	rest.GET("/backuplist/backups", getAllBackups)
+
+	rest.POST("/backuplist/backups", postBackupRecord)
+	rest.GET("/backuplist/test", testf)
+	// curl --header "Content-Type: application/json" \
+	//   --request POST \
+	//   --data '{"NameFirma":"nazwa_firmy","NamePawilon":"nazwa_pawilonu","NameServer":"nazwa_serwera","NameDb":"nazwa_bazy","status":true}' \
+	//   http://localhost:8080/backuplist/backups
 
 	// rest.POST("/backuplist/backup", postBackup)
 	// rest.GET("/backuplist/firma/:id", get)
@@ -33,6 +47,25 @@ func Createcallhandles() {
 
 }
 
+func testf() {
+
+}
+func postBackupRecord(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	bodyBytes, _ := ioutil.ReadAll(r.Body)
+	newrecord := NewRecord{}
+	json.Unmarshal(bodyBytes, &newrecord)
+	AddKopia(newrecord)
+	logtrace.Info.Println("ADD NEW RECORD ABOUT BACKUP", string(bodyBytes))
+	// n := DB.Where("login = ?", bodyLogin.Login).Where("password = ?", bodyLogin.Password).First(&emptyLogin).RowsAffected
+
+	// if n == 1 {
+	// 	log.Println(emptyLogin.Imie + " " + emptyLogin.Nazwisko + " Zalogowany")
+	// 	emptyLogin.AccessGranted = true
+	// }
+	// ret, _ := json.Marshal(emptyLogin)
+	// fmt.Fprint(w, string(ret))
+	// fmt.Println(string(ret))
+}
 func getAllFirms(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	l := selectFirmaAll()
 	logtrace.Info.Println("GET ALL FIRMS LIMIT")

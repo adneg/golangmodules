@@ -60,12 +60,13 @@ type Kopia struct {
 	IdPawilon int       `gorm:"type:bigint REFERENCES PAWILONY(id_pawilon)" json:"id_pawilon"`
 	IdServer  int       `gorm:"type:bigint REFERENCES SERVERY(id_server)" json:"id_server"`
 	IdDb      int       `gorm:"type:bigint REFERENCES BAZYDANYCH(id_db)" json:"id_db"`
-	Status    bool      `gorm:"type:BOOLEAN;NOT NULL;default:false"`
+	Status    bool      `gorm:"type:BOOLEAN;NOT NULL;default:false" json:"status"`
 	Data      time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP" json:"data"`
 }
 
 type NewRecord struct {
 	NameFirma, NamePawilon, NameServer, NameDb string
+	Status                                     bool
 }
 
 func (Kopia) TableName() string {
@@ -99,10 +100,12 @@ func CreateAllTables() {
 
 	db.AutoMigrate(&Firma{}, &Pawilon{}, &Server{}, &BazaDanych{}, &Kopia{})
 
-	n := NewRecord{NameFirma: "nazwa_firmy", NamePawilon: "nazwa_pawilonu", NameServer: "nazwa_serwera", NameDb: "nazwa_bazy"}
-	for i := 0; i < 2; i++ {
-		AddKopia(n)
-	}
+	// n := NewRecord{NameFirma: "nazwa_firmy", NamePawilon: "nazwa_pawilonu", NameServer: "nazwa_serwera", NameDb: "nazwa_bazy"}
+	// test, _ := json.Marshal(n)
+	// logtrace.Info.Println(string(test))
+	// for i := 0; i < 2; i++ {
+	// 	AddKopia(n)
+	// }
 	// GetKopiaLimit(30)
 
 }
@@ -202,7 +205,7 @@ func AddKopia(n NewRecord) {
 
 	}
 	// 5)
-	b := Kopia{IdDb: d.IdDb, IdFirma: f.IdFirma, IdPawilon: p.IdPawilon, IdServer: s.IdServer, Status: true}
+	b := Kopia{IdDb: d.IdDb, IdFirma: f.IdFirma, IdPawilon: p.IdPawilon, IdServer: s.IdServer, Status: n.Status}
 	db.Save(&b)
 	logtrace.Info.Println(b.IdBackup)
 	if b.IdBackup == 0 {
