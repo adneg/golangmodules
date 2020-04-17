@@ -9,4 +9,4 @@
 
 #5) add staticfiles
 
-#6) add backuplist -work in progres
+#6) add backuplist --work in progres
