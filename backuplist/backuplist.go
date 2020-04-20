@@ -67,6 +67,7 @@ type Kopia struct {
 type NewRecord struct {
 	NameFirma, NamePawilon, NameServer, NameDb string
 	Status                                     bool
+	Data                                       time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP" json:"data"`
 }
 
 func (Kopia) TableName() string {
@@ -85,7 +86,7 @@ func Start() {
 }
 
 func ClerTableDB() {
-	DropAllTable()
+	// DropAllTable()
 	CreateAllTables()
 
 }
@@ -104,7 +105,7 @@ func CreateAllTables() {
 	// test, _ := json.Marshal(n)
 	// logtrace.Info.Println(string(test))
 	// for i := 0; i < 2; i++ {
-	// 	AddKopia(n)
+	// 	addKopia(n)
 	// }
 	// GetKopiaLimit(30)
 
@@ -162,7 +163,30 @@ func selectKopiaLimit(n int) (data []byte) {
 	// logtrace.Info.Println(string(data))
 }
 
-func AddKopia(n NewRecord) {
+func selectKopiaHumanLastNight() (data []byte) {
+	year, month, day := time.Now().Date()
+	midnight := time.Date(year, month, day, 0, 0, 0, 0, time.Now().Location())
+	clock8pm := midnight.Add(-4 * time.Hour)
+	clock8am := midnight.Add(+8 * time.Hour)
+	logtrace.Info.Println(clock8pm.Format("2006.01.02 15:04:05"), "----", clock8am.Format("2006.01.02 15:04:05"))
+	k := []NewRecord{}
+	// db.Joins("left join FIRMY on KOPIE.id_firma = FIRMY.id_firma").Find(&k)
+	db.
+		Table("KOPIE").Select("FIRMY.name_firma, PAWILONY.name_pawilon,SERVERY.name_server, BAZYDANYCH.name_db,KOPIE.status, KOPIE.data").
+		Joins("left join FIRMY on KOPIE.id_firma = FIRMY.id_firma").
+		Joins("left join PAWILONY on KOPIE.id_pawilon= PAWILONY.id_pawilon").
+		Joins("left join SERVERY on KOPIE.id_server= SERVERY.id_server").
+		Joins("left join BAZYDANYCH on KOPIE.id_db= BAZYDANYCH.id_db").
+		// Where("Data BETWEEN ? AND ?", clock8pm, clock8am).
+		Scan(&k)
+	//
+	data, _ = json.Marshal(k)
+	logtrace.Info.Println(string(data))
+	return
+
+}
+
+func addKopia(n NewRecord) {
 	// 1) "nazwa firmy"
 	// 2) "nazwa pawilonu"
 	// 3) "nazwa servera"

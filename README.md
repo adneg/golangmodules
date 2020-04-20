@@ -10,3 +10,5 @@
 #5) add staticfiles
 
 #6) add backuplist --work in progres
+
+#7) add method qr code 
