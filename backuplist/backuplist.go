@@ -65,6 +65,11 @@ type Kopia struct {
 }
 
 type NewRecord struct {
+	IdBackup                                   int ` json:"id_backup"`
+	IdFirma                                    int `json:"id_firma"`
+	IdPawilon                                  int `json:"id_pawilon"`
+	IdServer                                   int `json:"id_server"`
+	IdDb                                       int `json:"id_db"`
 	NameFirma, NamePawilon, NameServer, NameDb string
 	Status                                     bool
 	Data                                       time.Time `gorm:"type:DATETIME;not null;default:CURRENT_TIMESTAMP" json:"data"`
@@ -172,7 +177,7 @@ func selectKopiaHumanLastNight() (data []byte) {
 	k := []NewRecord{}
 	// db.Joins("left join FIRMY on KOPIE.id_firma = FIRMY.id_firma").Find(&k)
 	db.
-		Table("KOPIE").Select("FIRMY.name_firma, PAWILONY.name_pawilon,SERVERY.name_server, BAZYDANYCH.name_db,KOPIE.status, KOPIE.data").
+		Table("KOPIE").Select("KOPIE.id_backup,FIRMY.id_firma,PAWILONY.id_pawilon,SERVERY.id_server,BAZYDANYCH.id_db, FIRMY.name_firma, PAWILONY.name_pawilon,SERVERY.name_server, BAZYDANYCH.name_db,KOPIE.status, KOPIE.data").
 		Joins("left join FIRMY on KOPIE.id_firma = FIRMY.id_firma").
 		Joins("left join PAWILONY on KOPIE.id_pawilon= PAWILONY.id_pawilon").
 		Joins("left join SERVERY on KOPIE.id_server= SERVERY.id_server").

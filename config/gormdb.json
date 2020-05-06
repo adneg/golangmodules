@@ -1,0 +1,9 @@
+{
+"DriverDB":"sqlite3", 
+"DB":false,
+"DatabaseDebug":true,
+"Databasefile":"./DANE.DB",
+"MaxIdleConns":1,
+"MaxOpenConns":1
+
+}

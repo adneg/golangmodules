@@ -12,3 +12,5 @@
 #6) add backuplist --work in progres
 
 #7) add method qr code 
+
+#8) add example main.go how use

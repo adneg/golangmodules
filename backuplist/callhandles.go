@@ -14,10 +14,10 @@ const (
 	fileContentType = "application/json"
 )
 
-// curl --header "Content-Type: application/json" \
-//   --request POST \
-//   --data '{"NameFirma":"nazwa_firmy","NamePawilon":"nazwa_pawilonu","NameServer":"nazwa_serwera","NameDb":"nazwa_bazy"}' \
-//   http://localhost:8080/backuplist/backups
+/*curl --header "Content-Type: application/json" \
+  --request POST \
+  --data '{"NameFirma":"nazwa_firmy","NamePawilon":"nazwa_pawilonu","NameServer":"nazwa_serwera","NameDb":"nazwa_bazy"}' \
+  http://localhost:8081/backuplist/backups*/
 
 func Createcallhandles() {
 	// rest.GET("/backuplist/backups/:limit", getLimitBackups)
